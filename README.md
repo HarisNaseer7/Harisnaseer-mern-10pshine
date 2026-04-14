@@ -1,0 +1,1 @@
+10 Pearls MERN Internship Notes App is a full stack project using MongoDB Express React and Node.js. It allows users to create update delete and search notes efficiently while demonstrating clean architecture responsive design and real world MERN development concepts
