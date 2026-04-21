@@ -100,4 +100,26 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-module.exports = { registerUser, loginUser };
+// @desc    Get current logged in user
+// @route   GET /api/auth/me
+// @access  Private
+const getMe = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    res.status(200).json({
+      success: true,
+      data: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+module.exports = { registerUser, loginUser, getMe };
