@@ -9,7 +9,7 @@ router.post('/register', registerUser);
 // POST /api/auth/login
 router.post('/login', loginUser);
 
-// GET /api/auth/me  ← protected route!
+// GET /api/auth/me
 router.get('/me', protect, getMe);
 
 module.exports = router;
