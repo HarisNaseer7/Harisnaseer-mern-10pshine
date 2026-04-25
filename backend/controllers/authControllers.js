@@ -121,5 +121,18 @@ const getMe = async (req, res, next) => {
   }
 };
 
+const logoutUser = async (req, res, next) => {
+  try {
+    logger.info(`User logged out: ${req.user.email}`);
 
-module.exports = { registerUser, loginUser, getMe };
+    res.status(200).json({
+      success: true,
+      message: 'Logged out successfully',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+module.exports = { registerUser, loginUser, getMe, logoutUser };
