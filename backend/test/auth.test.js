@@ -5,7 +5,7 @@ const app = require('../server');
 const { expect } = chai;
 const request = supertest(app);
 
-// unique email for each test run
+
 const testEmail = `test${Date.now()}@example.com`;
 let authToken;
 
