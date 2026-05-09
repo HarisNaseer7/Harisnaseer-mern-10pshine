@@ -8,6 +8,4 @@ const logger = pino({
       : undefined,
 });
 
-
-
 module.exports = logger;
