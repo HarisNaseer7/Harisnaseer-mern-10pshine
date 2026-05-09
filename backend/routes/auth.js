@@ -14,4 +14,7 @@ router.get('/me', protect, getMe);
 //api/auth/logout
 router.post('/logout', protect, logoutUser);
 
+// POST /api/auth/logout
+router.post('/logout', protect, logoutUser);
+
 module.exports = router;
