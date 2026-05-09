@@ -5,11 +5,19 @@ const requestLogger = require('./middleware/loggerMiddleware');
 const errorHandler = require('./middleware/errorMiddleware');
 const authRoutes = require('./routes/auth');
 const noteRoutes = require('./routes/notes');
+const cors = require('cors');
+
 
 dotenv.config();
 connectDB();
 
 const app = express();
+
+
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true,
+}));
 
 app.use(express.json());
 app.use(requestLogger);
