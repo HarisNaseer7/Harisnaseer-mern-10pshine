@@ -234,12 +234,16 @@ body {
   color: #2c3e50;
   margin-bottom: 8px;
   font-size: 18px;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .note-card p {
   color: #666;
   margin-bottom: 15px;
   line-height: 1.5;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .note-actions {
