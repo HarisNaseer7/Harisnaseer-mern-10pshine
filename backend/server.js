@@ -1,5 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
+dotenv.config();
+
 const connectDB = require('./config/db');
 const requestLogger = require('./middleware/loggerMiddleware');
 const errorHandler = require('./middleware/errorMiddleware');
@@ -8,7 +10,6 @@ const noteRoutes = require('./routes/notes');
 const cors = require('cors');
 
 
-dotenv.config();
 connectDB();
 
 const app = express();
@@ -32,7 +33,12 @@ app.get('/health', (req, res) => {
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  const logger = require('./utils/logger');
-  logger.info(`Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
-});
+
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    const logger = require('./utils/logger');
+    logger.info(`Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
+  });
+}
+
+module.exports = app;
