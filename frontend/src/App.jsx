@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import GuestDashboard from './pages/GuestDashboard';
 import NoteEditor from './pages/NoteEditor';
+import Profile from './pages/Profile';
 
 const AppRoutes = () => {
   const { user, loading } = useAuth();
@@ -40,6 +41,14 @@ const AppRoutes = () => {
         element={
           <PrivateRoute>
             <NoteEditor />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path='/profile'
+        element={
+          <PrivateRoute>
+            <Profile />
           </PrivateRoute>
         }
       />
