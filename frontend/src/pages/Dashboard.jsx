@@ -5,7 +5,9 @@ import { useAuth } from '../context/AuthContext';
 
 const Dashboard = () => {
   const [notes, setNotes] = useState([]);
+  const [search, setSearch] = useState('');
   const [error, setError] = useState('');
+
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -31,21 +33,38 @@ const Dashboard = () => {
     }
   };
 
+  const filteredNotes = notes.filter((note) =>
+    note.title.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className='dashboard'>
       <div className='dashboard-header'>
         <h2>Welcome, {user?.name}!</h2>
       </div>
+
       {error && <p className='error'>{error}</p>}
+
       <button onClick={() => navigate('/notes/new')} className='create-note-btn'>
         + Create New Note
       </button>
+
+      <div className='search-container'>
+        <input
+          type='text'
+          placeholder='🔍 Search notes by title...'
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className='search-input'
+        />
+      </div>
+
       <div className='notes-list'>
-        <h3>My Notes ({notes.length})</h3>
-        {notes.length === 0 ? (
-          <p>No notes yet. Create your first note!</p>
+        <h3>My Notes ({filteredNotes.length})</h3>
+        {filteredNotes.length === 0 ? (
+          <p>{search ? 'No notes found for your search!' : 'No notes yet. Create your first note!'}</p>
         ) : (
-          notes.map((note) => (
+          filteredNotes.map((note) => (
             <div key={note._id} className='note-card'>
               <h4>{note.title}</h4>
               <div

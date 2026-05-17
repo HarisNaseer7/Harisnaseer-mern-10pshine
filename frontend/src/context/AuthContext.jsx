@@ -19,10 +19,15 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const loginUser = (token, userData) => {
-    localStorage.setItem('token', token);
+  const loginUser = async (token, userData) => {
+  localStorage.setItem('token', token);
+  try {
+    const res = await getMe();
+    setUser(res.data.data);
+  } catch {
     setUser(userData);
-  };
+  }
+};
 
   const logoutUser = async () => {
     await logoutApi();
