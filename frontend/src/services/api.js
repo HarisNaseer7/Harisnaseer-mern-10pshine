@@ -6,9 +6,7 @@ const API = axios.create({
 
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+  if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
@@ -22,3 +20,7 @@ export const getNote = (id) => API.get(`/notes/${id}`);
 export const createNote = (data) => API.post('/notes', data);
 export const updateNote = (id, data) => API.put(`/notes/${id}`, data);
 export const deleteNote = (id) => API.delete(`/notes/${id}`);
+export const pinNote = (id) => API.patch(`/notes/${id}/pin`);
+export const archiveNote = (id) => API.patch(`/notes/${id}/archive`);
+export const trashNote = (id) => API.patch(`/notes/${id}/trash`);
+export const restoreNote = (id) => API.patch(`/notes/${id}/restore`);

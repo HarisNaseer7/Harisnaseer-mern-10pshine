@@ -8,12 +8,11 @@ const errorHandler = require('./middleware/errorMiddleware');
 const authRoutes = require('./routes/auth');
 const noteRoutes = require('./routes/notes');
 const cors = require('cors');
-
+const passport = require('./config/passport');
 
 connectDB();
 
 const app = express();
-
 
 app.use(cors({
   origin: 'http://localhost:5173',
@@ -21,6 +20,8 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
+app.use(passport.initialize());   // ← passport registered here
 app.use(requestLogger);
 
 app.use('/api/auth', authRoutes);
