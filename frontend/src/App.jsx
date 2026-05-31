@@ -18,7 +18,20 @@ const AppRoutes = () => {
   const location = useLocation();
   const hideNavbar = ['/login', '/register', '/forgot-password', '/reset-password', '/dashboard', '/notes/new', '/auth/callback', '/profile', '/guest'].includes(location.pathname) || location.pathname.startsWith('/notes/');
 
-  if (loading) return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading...</div>;
+ if (loading) return (
+  <div style={{
+    minHeight: '100vh', display: 'flex', alignItems: 'center',
+    justifyContent: 'center', background: '#0f1117', flexDirection: 'column', gap: '16px'
+  }}>
+    <div style={{
+      width: '40px', height: '40px', borderRadius: '50%',
+      border: '3px solid rgba(127,119,221,0.2)',
+      borderTop: '3px solid #7f77dd',
+      animation: 'spin 0.8s linear infinite',
+    }} />
+    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+  </div>
+);
 
   return (
     <>
