@@ -8,5 +8,12 @@ module.exports = {
   transform: {
     '^.+\\.[jt]sx?$': 'babel-jest',
   },
-  coverageThreshold: {},
+  coverageThreshold: {
+    global: {
+      lines: 10,
+      statements: 10,
+      branches: 5,
+      functions: 5,
+    }
+  },
 };
