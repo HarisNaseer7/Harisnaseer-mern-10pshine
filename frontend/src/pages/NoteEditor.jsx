@@ -4,13 +4,8 @@ import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { createNote, getNote, updateNote } from '../services/api';
 import { useTheme } from '../context/ThemeContext';
-
-const categories = [
-  { id: 'general', label: 'General', color: '#9ca3af' },
-  { id: 'work', label: 'Work', color: '#378ADD' },
-  { id: 'personal', label: 'Personal', color: '#639922' },
-  { id: 'ideas', label: 'Ideas', color: '#534AB7' },
-];
+import Sidebar, { categories } from '../components/Sidebar';
+import { getThemeColors } from '../utils/theme';
 
 const NoteEditor = () => {
   const [title, setTitle] = useState('');
@@ -23,13 +18,7 @@ const NoteEditor = () => {
   const { id } = useParams();
   const { isDark } = useTheme();
 
-  const bg = isDark ? '#0f1117' : '#f9fafb';
-  const cardBg = isDark ? '#1a1d27' : 'white';
-  const cardBorder = isDark ? 'rgba(255,255,255,0.08)' : '#e5e7eb';
-  const textPrimary = isDark ? 'white' : '#111827';
-  const textSecondary = isDark ? 'rgba(255,255,255,0.45)' : '#6b7280';
-  const topbarBg = isDark ? '#13151f' : 'white';
-  const topbarBorder = isDark ? 'rgba(255,255,255,0.06)' : '#f3f4f6';
+  const { bg, cardBg, cardBorder, textPrimary, textSecondary, topbarBg, topbarBorder } = getThemeColors(isDark);
 
   useEffect(() => { if (id) fetchNote(); }, [id]);
 
@@ -82,42 +71,7 @@ const NoteEditor = () => {
   return (
     <div style={{ display: 'flex', height: '100vh', background: bg, fontFamily: 'system-ui' }}>
 
-      {/* Sidebar */}
-      <div style={{
-        width: '220px', minWidth: '220px', background: '#0f1117',
-        display: 'flex', flexDirection: 'column', padding: '20px 16px',
-        borderRight: '1px solid rgba(255,255,255,0.06)',
-      }}>
-        {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
-          <div style={{
-            width: '32px', height: '32px', background: 'white', borderRadius: '8px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontWeight: 700, fontSize: '14px', color: '#0f1117',
-          }}>N</div>
-          <span style={{ color: 'white', fontSize: '15px', fontWeight: 500 }}>NoteApp</span>
-        </div>
-
-        {/* Back button */}
-        <button
-          onClick={() => navigate('/dashboard')}
-          style={{
-            display: 'flex', alignItems: 'center', gap: '8px',
-            padding: '8px 10px', background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px',
-            color: 'rgba(255,255,255,0.7)', fontSize: '13px', cursor: 'pointer',
-            marginBottom: '20px',
-          }}
-          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-          onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'}
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polyline points="15 18 9 12 15 6"/>
-          </svg>
-          Back to notes
-        </button>
-
-        {/* Category */}
+      <Sidebar mode="editor">
         <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.08em', marginBottom: '10px' }}>
           CATEGORY
         </div>
@@ -130,10 +84,8 @@ const NoteEditor = () => {
               fontSize: '13px', marginBottom: '3px',
               background: category === cat.id ? 'rgba(127,119,221,0.2)' : 'transparent',
               border: category === cat.id ? '1px solid rgba(127,119,221,0.3)' : '1px solid transparent',
-              transition: 'all 0.15s',
-            }}
-          >
-            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: cat.color, flexShrink: 0 }} />
+            }}>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: cat.color }} />
             {cat.label}
             {category === cat.id && (
               <svg style={{ marginLeft: 'auto' }} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7f77dd" strokeWidth="3">
@@ -142,9 +94,7 @@ const NoteEditor = () => {
             )}
           </div>
         ))}
-
-        {/* Word count */}
-        <div style={{ marginTop: 'auto', padding: '12px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
           <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', marginBottom: '4px' }}>STATS</div>
           <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)' }}>
             {content.replace(/<[^>]*>/g, '').trim().split(/\s+/).filter(Boolean).length} words
@@ -153,7 +103,7 @@ const NoteEditor = () => {
             {content.replace(/<[^>]*>/g, '').length} characters
           </div>
         </div>
-      </div>
+      </Sidebar>
 
       {/* Editor Area */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -167,7 +117,6 @@ const NoteEditor = () => {
             <h1 style={{ fontSize: '15px', fontWeight: 600, color: textPrimary, margin: 0 }}>
               {id ? 'Edit note' : 'New note'}
             </h1>
-            {/* Category badge */}
             {(() => {
               const cat = categories.find(c => c.id === category);
               return (
