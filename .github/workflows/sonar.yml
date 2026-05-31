@@ -3,8 +3,9 @@ name: SonarQube Analysis
 on:
   push:
     branches:
-      - feature/frontend/test-fixes
+      - develop
       - main
+      - feature/frontend/test-fixes
 
 jobs:
   sonarqube:
