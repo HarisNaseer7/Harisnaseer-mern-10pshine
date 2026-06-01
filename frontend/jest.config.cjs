@@ -8,12 +8,10 @@ module.exports = {
   transform: {
     '^.+\\.[jt]sx?$': 'babel-jest',
   },
+  globals: {
+    'import.meta': { env: { VITE_API_URL: 'http://localhost:5000/api' } },
+  },
   coverageThreshold: {
-    global: {
-      lines: 10,
-      statements: 10,
-      branches: 5,
-      functions: 5,
-    }
+    global: { lines: 10, statements: 10, branches: 5, functions: 5 }
   },
 };

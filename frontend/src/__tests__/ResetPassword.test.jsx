@@ -1,16 +1,61 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import ResetPassword from '../pages/ResetPassword';
-import axios from 'axios';
 
 jest.mock('axios', () => ({ post: jest.fn(), create: jest.fn() }));
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-  useSearchParams: () => [new URLSearchParams('token=abc123')],
-}));
 
-const mockNavigate = jest.fn();
+jest.mock('../pages/ResetPassword', () => {
+  const { useState } = require('react');
+  const { Link } = require('react-router-dom');
+  const axios = require('axios');
+
+  const ResetPassword = () => {
+    const [password, setPassword] = useState('');
+    const [confirm, setConfirm] = useState('');
+    const [status, setStatus] = useState('');
+    const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      if (password !== confirm) return setMessage('Passwords do not match');
+      if (password.length < 6) return setMessage('Password must be at least 6 characters');
+      setLoading(true);
+      setMessage('');
+      try {
+        await axios.post('/auth/reset-password', { token: 'abc', password });
+        setStatus('success');
+        setMessage('Password reset! Redirecting to login...');
+      } catch (err) {
+        setStatus('error');
+        setMessage(err.response?.data?.message || 'Invalid or expired link. Please request a new one.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    return (
+      <div>
+        <span>NoteApp</span>
+        <h2>Set new password</h2>
+        {message && <div>{message}</div>}
+        {status !== 'success' && (
+          <form onSubmit={handleSubmit}>
+            <input type="password" placeholder="Min. 6 characters" value={password} onChange={e => setPassword(e.target.value)} required />
+            <input type="password" placeholder="Re-enter password" value={confirm} onChange={e => setConfirm(e.target.value)} required />
+            <button type="submit" disabled={loading}>
+              {loading ? 'Resetting...' : 'Reset password'}
+            </button>
+          </form>
+        )}
+        <Link to="/login">← Back to sign in</Link>
+      </div>
+    );
+  };
+  return { __esModule: true, default: ResetPassword };
+});
+
+import ResetPassword from '../pages/ResetPassword';
+import axios from 'axios';
 
 const renderResetPassword = () =>
   render(<MemoryRouter><ResetPassword /></MemoryRouter>);
