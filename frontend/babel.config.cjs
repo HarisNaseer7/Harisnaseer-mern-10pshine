@@ -4,6 +4,6 @@ module.exports = {
     ['@babel/preset-react', { runtime: 'automatic' }],
   ],
   plugins: [
-    ['babel-plugin-transform-import-meta'],
+    ['babel-plugin-transform-vite-meta-env'],
   ],
 };

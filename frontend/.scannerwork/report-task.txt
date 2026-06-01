@@ -1,0 +1,6 @@
+projectKey=frontend-project
+serverUrl=http://localhost:9000
+serverVersion=26.5.0.122743
+dashboardUrl=http://localhost:9000/dashboard?id=frontend-project
+ceTaskId=a2833a20-5ae2-4b3b-8293-1e7a43a86c23
+ceTaskUrl=http://localhost:9000/api/ce/task?id=a2833a20-5ae2-4b3b-8293-1e7a43a86c23
