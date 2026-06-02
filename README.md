@@ -29,14 +29,21 @@ A full-stack notes application built with MongoDB, Express, React, and Node.js a
 ---
 
 ## Project Structure
+
+```
 10P-Shine-MERN/
+├── .github/
+│   └── workflows/
+│       └── sonar.yml
 ├── frontend/
 │   ├── src/
+│   │   ├── __tests__/
 │   │   ├── components/
 │   │   ├── context/
 │   │   ├── pages/
 │   │   ├── services/
 │   │   └── utils/
+│   ├── sonar-project.properties
 │   └── package.json
 ├── backend/
 │   ├── config/
@@ -44,8 +51,11 @@ A full-stack notes application built with MongoDB, Express, React, and Node.js a
 │   ├── middleware/
 │   ├── models/
 │   ├── routes/
+│   ├── test/
+│   ├── sonar-project.properties
 │   └── server.js
 └── README.md
+```
 
 ---
 
@@ -65,6 +75,8 @@ npm install
 ```
 
 Create `.env` file:
+
+```
 PORT=5000
 NODE_ENV=development
 MONGO_URI=your_mongodb_connection_string
@@ -75,6 +87,7 @@ GOOGLE_CLIENT_SECRET=your_google_client_secret
 FRONTEND_URL=http://localhost:5173
 EMAIL_FROM=your_gmail@gmail.com
 EMAIL_PASSWORD=your_gmail_app_password
+```
 
 ```bash
 npm run dev
@@ -88,7 +101,10 @@ npm install
 ```
 
 Create `.env` file:
+
+```
 VITE_API_URL=http://localhost:5000/api
+```
 
 ```bash
 npm run dev
@@ -100,17 +116,63 @@ Open `http://localhost:5173`
 
 ## Testing
 
-**Backend** (Mocha + Chai) — 21 tests passing
+### Backend — Mocha + Chai + Supertest
+
 ```bash
 cd backend
 npm test
 ```
 
-**Frontend** (Jest + React Testing Library) — 43 tests passing
+**21 tests passing** — covers Auth and Notes API routes
+
+### Frontend — Jest + React Testing Library
+
 ```bash
 cd frontend
-npm test
+npm test -- --coverage --watchAll=false
 ```
+
+**98 tests passing across 13 suites** — covers Login, Register, Dashboard, NoteEditor, ForgotPassword, ResetPassword, AuthCallback, ThemeContext, Profile, GuestDashboard, Navbar, PrivateRoute, api
+
+---
+
+## Code Quality — SonarQube
+
+Both projects are analyzed using SonarQube Community Edition running locally on `http://localhost:9000`.
+
+| Project | Quality Gate | Security | Reliability | Maintainability | Coverage |
+|---|---|---|---|---|---|
+| Frontend | ✅ Passed | A | C | A | 26.3% |
+| Backend | ✅ Passed | A | A | A | 46.6% |
+
+To run analysis locally:
+
+```bash
+# Frontend
+cd frontend
+npx sonar -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.token=YOUR_TOKEN \
+  -Dsonar.projectKey=frontend-project
+
+# Backend
+cd backend
+npm run coverage
+npx sonar -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.token=YOUR_TOKEN \
+  -Dsonar.projectKey=backend-project
+```
+
+---
+
+## CI/CD
+
+GitHub Actions automatically runs on every push:
+
+- Installs frontend dependencies
+- Runs Jest tests with coverage report
+- Performs SonarQube code quality analysis
+
+Workflow file: `.github/workflows/sonar.yml`
 
 ---
 
@@ -144,6 +206,23 @@ npm test
 
 ---
 
+## Git Workflow
+
+| Branch | Purpose |
+|---|---|
+| `main` | Production ready |
+| `develop` | Integration branch |
+| `feature/*` | New features |
+| `refactor/*` | Code improvements |
+| `fix/*` | Bug fixes |
+| `docs/*` | Documentation updates |
+
+---
+
 ## Author
 
-Haris Naseer - [GitHub](https://github.com/HarisNaseer7)
+Haris Naseer — [GitHub](https://github.com/HarisNaseer7)
+
+---
+
+*This project is part of the 10 Pearls MERN Internship Program.*
