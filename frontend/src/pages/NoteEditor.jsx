@@ -4,7 +4,7 @@ import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { createNote, getNote, updateNote } from '../services/api';
 import { useTheme } from '../context/ThemeContext';
-import Sidebar, { categories } from '../components/Sidebar';
+import Sidebar, { categories, MenuIcon } from '../components/Sidebar';
 import { getThemeColors } from '../utils/theme';
 
 const NoteEditor = () => {
@@ -13,6 +13,7 @@ const NoteEditor = () => {
   const [category, setCategory] = useState('general');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -71,7 +72,7 @@ const NoteEditor = () => {
   return (
     <div style={{ display: 'flex', height: '100vh', background: bg, fontFamily: 'system-ui' }}>
 
-      <Sidebar mode="editor">
+      <Sidebar mode="editor" mobileOpen={mobileSidebarOpen} onCloseMobile={() => setMobileSidebarOpen(false)}>
         <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)', letterSpacing: '0.08em', marginBottom: '10px' }}>
           CATEGORY
         </div>
@@ -110,10 +111,13 @@ const NoteEditor = () => {
 
         {/* Header */}
         <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', rowGap: '10px',
           padding: '16px 24px', background: topbarBg, borderBottom: `1px solid ${topbarBorder}`,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <button className="sidebar-toggle-btn" onClick={() => setMobileSidebarOpen(true)} aria-label="Open menu" style={{ color: textPrimary }}>
+              <MenuIcon />
+            </button>
             <h1 style={{ fontSize: '15px', fontWeight: 600, color: textPrimary, margin: 0 }}>
               {id ? 'Edit note' : 'New note'}
             </h1>

@@ -79,15 +79,15 @@ const Register = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex' }}>
+    <div className="auth-split" style={{ minHeight: '100vh', display: 'flex' }}>
 
       {/* Left Panel */}
-      <div style={{
+      <div className="auth-left-panel" style={{
         width: '44%', background: '#0f1117',
         display: 'flex', flexDirection: 'column',
         justifyContent: 'space-between', padding: '40px',
         position: 'relative', overflow: 'hidden'
-      }} className="hidden lg:flex">
+      }}>
         {/* Dot grid */}
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none',

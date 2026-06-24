@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import Sidebar from '../components/Sidebar';
+import Sidebar, { MenuIcon } from '../components/Sidebar';
 import { getThemeColors } from '../utils/theme';
 import axios from 'axios';
 
@@ -13,6 +13,7 @@ const Profile = () => {
   const fileRef = useRef();
 
   const [activeTab, setActiveTab] = useState('profile');
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [name, setName] = useState(user?.name || '');
   const [avatar, setAvatar] = useState(user?.avatar || null);
   const [avatarPreview, setAvatarPreview] = useState(
@@ -135,10 +136,15 @@ const Profile = () => {
         mode="profile"
         activeTab={activeTab}
         setActiveTab={setActiveTab}
+        mobileOpen={mobileSidebarOpen}
+        onCloseMobile={() => setMobileSidebarOpen(false)}
       />
 
       {/* Main */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '32px' }}>
+        <button className="sidebar-toggle-btn" onClick={() => setMobileSidebarOpen(true)} aria-label="Open menu" style={{ color: textPrimary, marginBottom: '16px' }}>
+          <MenuIcon />
+        </button>
         <div style={{ maxWidth: '560px', margin: '0 auto' }}>
 
           {/* Profile Tab */}

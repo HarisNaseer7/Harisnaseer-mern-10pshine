@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
+import { MenuIcon } from '../components/Sidebar';
 
 const GuestDashboard = () => {
   const [notes, setNotes] = useState([]);
@@ -12,6 +13,7 @@ const GuestDashboard = () => {
   const [activeSection, setActiveSection] = useState('all');
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('general');
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   const navigate = useNavigate();
   const { isDark, toggleTheme } = useTheme();
@@ -139,7 +141,8 @@ const GuestDashboard = () => {
       )}
 
       {/* Sidebar */}
-      <div style={{ width: '220px', minWidth: '220px', background: '#0f1117', display: 'flex', flexDirection: 'column', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
+      {mobileSidebarOpen && <div className="sidebar-backdrop" onClick={() => setMobileSidebarOpen(false)} />}
+      <div className={`app-sidebar${mobileSidebarOpen ? ' is-open' : ''}`} style={{ width: '220px', minWidth: '220px', background: '#0f1117', display: 'flex', flexDirection: 'column', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
 
         {/* Logo */}
         <div style={{ padding: '20px 16px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
@@ -174,7 +177,7 @@ const GuestDashboard = () => {
         {/* Nav */}
         <div style={{ padding: '0 8px' }}>
           {navItems.map(item => (
-            <div key={item.id} onClick={() => setActiveSection(item.id)}
+            <div key={item.id} onClick={() => { setActiveSection(item.id); setMobileSidebarOpen(false); }}
               style={{
                 display: 'flex', alignItems: 'center', gap: '10px',
                 padding: '8px 10px', borderRadius: '8px', cursor: 'pointer',
@@ -229,11 +232,16 @@ const GuestDashboard = () => {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
         {/* Topbar */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', background: topbarBg, borderBottom: `1px solid ${topbarBorder}` }}>
-          <h1 style={{ fontSize: '16px', fontWeight: 600, color: textPrimary, margin: 0 }}>
-            {activeSection === 'pinned' ? 'Pinned' : 'All notes'}
-          </h1>
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', rowGap: '10px', padding: '16px 24px', background: topbarBg, borderBottom: `1px solid ${topbarBorder}` }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <button className="sidebar-toggle-btn" onClick={() => setMobileSidebarOpen(true)} aria-label="Open menu" style={{ color: textPrimary }}>
+              <MenuIcon />
+            </button>
+            <h1 style={{ fontSize: '16px', fontWeight: 600, color: textPrimary, margin: 0 }}>
+              {activeSection === 'pinned' ? 'Pinned' : 'All notes'}
+            </h1>
+          </div>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', background: isDark ? 'rgba(255,200,0,0.1)' : '#fffbeb', border: '1px solid rgba(255,200,0,0.3)', borderRadius: '8px' }}>
               <span style={{ fontSize: '12px' }}>⚠️</span>
               <span style={{ fontSize: '12px', color: isDark ? 'rgba(255,200,0,0.8)' : '#92400e' }}>Guest mode — notes not saved</span>

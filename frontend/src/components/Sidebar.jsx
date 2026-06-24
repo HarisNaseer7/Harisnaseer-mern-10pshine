@@ -42,6 +42,14 @@ const LogoutIcon = () => (
   </svg>
 );
 
+const MenuIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <line x1="3" y1="12" x2="21" y2="12"/>
+    <line x1="3" y1="6" x2="21" y2="6"/>
+    <line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+);
+
 const sidebarBtnStyle = {
   width: '100%', display: 'flex', alignItems: 'center', gap: '8px',
   padding: '8px 10px', background: 'transparent', border: 'none',
@@ -63,6 +71,9 @@ const Sidebar = ({
   setActiveTab,
   // Children slot for extra content
   children,
+  // Mobile drawer controls
+  mobileOpen = false,
+  onCloseMobile,
 }) => {
   const { user, logoutUser } = useAuth();
   const { isDark, toggleTheme } = useTheme();
@@ -73,12 +84,19 @@ const Sidebar = ({
     navigate('/login');
   };
 
+  const selectAndClose = (fn) => {
+    fn();
+    onCloseMobile?.();
+  };
+
   const avatarUrl = user?.avatar
     ? (user.avatar.startsWith('http') ? user.avatar : `${BASE_URL}${user.avatar}`)
     : null;
 
   return (
-    <div style={{
+    <>
+    {mobileOpen && <div className="sidebar-backdrop" onClick={onCloseMobile} />}
+    <div className={`app-sidebar${mobileOpen ? ' is-open' : ''}`} style={{
       width: '220px', minWidth: '220px', background: '#0f1117',
       display: 'flex', flexDirection: 'column',
       borderRight: '1px solid rgba(255,255,255,0.06)',
@@ -98,7 +116,7 @@ const Sidebar = ({
       {/* User */}
       <div
         style={{ padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)', cursor: 'pointer' }}
-        onClick={() => navigate('/profile')}
+        onClick={() => selectAndClose(() => navigate('/profile'))}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{
@@ -143,7 +161,7 @@ const Sidebar = ({
           <div style={{ padding: '0 8px' }}>
             {navItems.map(item => (
               <div key={item.id}
-                onClick={() => { setActiveSection(item.id); setActiveCategory(''); }}
+                onClick={() => selectAndClose(() => { setActiveSection(item.id); setActiveCategory(''); })}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '10px',
                   padding: '8px 10px', borderRadius: '8px', cursor: 'pointer',
@@ -174,7 +192,7 @@ const Sidebar = ({
             </div>
             {categories.map(cat => (
               <div key={cat.id}
-                onClick={() => { setActiveCategory(activeCategory === cat.id ? '' : cat.id); setActiveSection('all'); }}
+                onClick={() => selectAndClose(() => { setActiveCategory(activeCategory === cat.id ? '' : cat.id); setActiveSection('all'); })}
                 style={{
                   display: 'flex', alignItems: 'center', gap: '10px',
                   padding: '7px 10px', borderRadius: '8px', cursor: 'pointer',
@@ -194,7 +212,7 @@ const Sidebar = ({
       {mode === 'editor' && (
         <div style={{ padding: '12px 16px', flex: 1 }}>
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => selectAndClose(() => navigate('/dashboard'))}
             style={{
               display: 'flex', alignItems: 'center', gap: '8px',
               padding: '8px 10px', background: 'rgba(255,255,255,0.06)',
@@ -218,7 +236,7 @@ const Sidebar = ({
       {mode === 'profile' && (
         <div style={{ padding: '12px 8px', flex: 1 }}>
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => selectAndClose(() => navigate('/dashboard'))}
             style={{ ...sidebarBtnStyle, color: 'rgba(255,255,255,0.5)', marginBottom: '4px' }}
             onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'white'; }}
             onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
@@ -233,7 +251,7 @@ const Sidebar = ({
             { id: 'profile', label: 'Profile Info', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> },
             { id: 'password', label: 'Change Password', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> },
           ].map(tab => (
-            <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+            <button key={tab.id} onClick={() => selectAndClose(() => setActiveTab(tab.id))}
               style={{
                 width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
                 padding: '8px 10px',
@@ -270,8 +288,9 @@ const Sidebar = ({
         </button>
       </div>
     </div>
+    </>
   );
 };
 
 export default Sidebar;
-export { categories, navItems };
+export { categories, navItems, MenuIcon };

@@ -54,10 +54,10 @@ const Login = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex' }}>
+    <div className="auth-split" style={{ minHeight: '100vh', display: 'flex' }}>
 
       {/* Left Panel — fully inline styles, no Tailwind */}
-      <div style={{
+      <div className="auth-left-panel" style={{
         width: '44%',
         background: '#0f1117',
         display: 'flex',

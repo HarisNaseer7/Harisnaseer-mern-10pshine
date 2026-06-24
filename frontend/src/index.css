@@ -85,3 +85,59 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
   border-color: #3498db;
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
 }
+
+/* Sidebar — collapses into an off-canvas drawer on mobile */
+.sidebar-toggle-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .auth-split {
+    flex-direction: column;
+  }
+
+  .auth-left-panel {
+    width: 100% !important;
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+  }
+
+  .app-sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-toggle-btn {
+    display: flex;
+  }
+
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 190;
+  }
+}

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getNotes, deleteNote, pinNote, archiveNote, trashNote, restoreNote, createNote } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import Sidebar, { categories } from '../components/Sidebar';
+import Sidebar, { categories, MenuIcon } from '../components/Sidebar';
 import { getThemeColors } from '../utils/theme';
 
 const Dashboard = () => {
@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [activeCategory, setActiveCategory] = useState('');
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [importStatus, setImportStatus] = useState('');
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const importRef = useRef();
   const exportMenuRef = useRef();
 
@@ -227,18 +228,25 @@ const Dashboard = () => {
         search={search}
         setSearch={setSearch}
         notes={notes}
+        mobileOpen={mobileSidebarOpen}
+        onCloseMobile={() => setMobileSidebarOpen(false)}
       />
 
       {/* Main Content */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
         {/* Topbar */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', background: topbarBg, borderBottom: `1px solid ${topbarBorder}` }}>
-          <h1 style={{ fontSize: '16px', fontWeight: 600, color: textPrimary, margin: 0 }}>
-            {activeCategory ? categories.find(c => c.id === activeCategory)?.label : sectionTitles[activeSection]}
-          </h1>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', rowGap: '10px', padding: '16px 24px', background: topbarBg, borderBottom: `1px solid ${topbarBorder}` }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <button className="sidebar-toggle-btn" onClick={() => setMobileSidebarOpen(true)} aria-label="Open menu" style={{ color: textPrimary }}>
+              <MenuIcon />
+            </button>
+            <h1 style={{ fontSize: '16px', fontWeight: 600, color: textPrimary, margin: 0 }}>
+              {activeCategory ? categories.find(c => c.id === activeCategory)?.label : sectionTitles[activeSection]}
+            </h1>
+          </div>
 
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
             {importStatus && (
               <span style={{
                 fontSize: '12px', padding: '6px 12px', borderRadius: '8px',
