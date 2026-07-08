@@ -109,8 +109,7 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-
   }
 
   .auth-left-panel {
-    width: 100% !important;
-    min-height: 200px;
+    display: none !important;
   }
 }
 
